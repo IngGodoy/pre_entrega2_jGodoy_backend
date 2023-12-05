@@ -11,7 +11,7 @@ export default class CartsManager {
 
     async getById(cid){
         try {
-            return await CartModel.findById(cid);
+            return await CartModel.findById(cid).populate("products");
         } catch (error) {
             console.log(error);
         };
@@ -68,11 +68,10 @@ export default class CartsManager {
 
     async addProductToCart(cid, pid) {
         try {
-            return await CartModel.updateOne(
-                { _id: cid },
-                { $push: { products: pid } },
-                { new: true }
-            );
+            const cart = CartModel.findById(cid);
+            cart.products.push(pid);
+            cart.save(); // guardar los cambios en mongoDb
+            return cart;
         } catch (error) {
             console.log(error);
         };

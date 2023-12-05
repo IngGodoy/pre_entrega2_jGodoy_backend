@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import mongoose, { Schema, model } from "mongoose";
 
 
 export const cartsCollection = "carts"; // nombre de la carpeta collection en mongoDb
@@ -10,13 +10,14 @@ const cartSchema = new Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "products",
           },
-          quantity: { type: Number, default: 1 },
-        },
-      ],
+          quantity: { type: Number, default: 1 }
+        }
+        
+      ]
     });
     
-    collectionSchema.pre("find", function () {
-      this.populate("products.product");
+    cartSchema.pre("find", function () {
+     this.populate("products");
     });
 
 export const CartModel = model(cartsCollection, cartSchema);
