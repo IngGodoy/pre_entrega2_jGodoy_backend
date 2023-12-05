@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import mongoosePaginate from "mongoose-paginate-v2";
 
 export const productCollection = "products";
 
@@ -13,6 +14,8 @@ export const productSchema = new Schema({
   status: {type: Boolean, default: true}
 
 });
+
+productSchema.plugin(mongoosePaginate); // esto me permite paginar la clase product
 
 export const ProductModel = model(productCollection, productSchema);
 

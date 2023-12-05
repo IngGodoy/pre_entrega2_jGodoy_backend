@@ -2,9 +2,19 @@ import {ProductModel} from "../models/product.model.js";
 
 export default class ProductsManager {
     
-    async getAll(){
+    async getAll(limit = 10, page = 1, sort = {}, category = {}){
         try {
-            return await ProductModel.find();
+            // aqui agrego el metodo para paginar los productos
+            return await ProductModel.paginate(
+                {
+                    category: category  
+                },
+                {
+                    page,
+                    limit, 
+                    sort
+                }
+            );
         } catch (error) {
             console.log(error);
         };
