@@ -7,11 +7,12 @@ const productsManager = new ProductsManager();
 export const getAllProducts = async (req, res)=>{
     try {
         
-        const {limit, page, sort, category} = req.query
-        const products = await productsManager.getAll(limit, page, sort, category);
+        const {limit, page, sort, filtro} = req.query
+        const products = await productsManager.getAll(limit, page, sort, filtro);
+        console.log("productos del get all",products) // borrar
 
-        const next = products.hasNextPage ? `http://localhost:8080/api/products?page=${response.nextPage}` : null;
-        const prev = products.hasPrevPage ? `http://localhost:8080/api/products?page=${response.prevPage}` : null;
+        const next = products.hasNextPage ? `http://localhost:8080/api/products?page=${products.nextPage}` : null;
+        const prev = products.hasPrevPage ? `http://localhost:8080/api/products?page=${products.prevPage}` : null;
         
         // respuesta en formato de paginación
         res.status(200).json({
