@@ -2,12 +2,12 @@ import {ProductModel} from "../models/product.model.js";
 
 export default class ProductsManager {
     
-    async getAll(limit = 10, page = 1, sort = {}, filtro){
+    async getAll(limit = 10, page = 1, sort = {}, filtro = ""){
         try {
             // aqui agrego el metodo para paginar los productos
             return await ProductModel.paginate(
                 {
-                    filtro  
+                    category : filtro  
                 },
                 {
                     page,
@@ -31,7 +31,8 @@ export default class ProductsManager {
     async create(objeto){
         try {
             console.log("objeto en el manager", objeto); //borrar
-            return await ProductModel.create(objeto);
+             const updateCart = await ProductModel.create(objeto);
+             return updateCart
         } catch (error) {
             console.log(error);
         };

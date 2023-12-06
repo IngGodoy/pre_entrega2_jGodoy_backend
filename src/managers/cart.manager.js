@@ -34,7 +34,7 @@ export default class CartsManager {
 
     async create(){
         try {
-            return await CartModel.create();
+            return await CartModel.create({ products: [] });
         } catch (error) {
             console.log(error);
         };
@@ -68,7 +68,9 @@ export default class CartsManager {
 
     async addProductToCart(cid, pid) {
         try {
-            const cart = CartModel.findById(cid);
+            console.log("ir a agregar el producto");
+            console.log("cid: " +cid+ "/ pid: " + pid) //borrar
+            const cart = await CartModel.findById(cid);
             cart.products.push(pid);
             cart.save(); // guardar los cambios en mongoDb
             return cart;

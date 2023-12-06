@@ -14,7 +14,7 @@ const PORT = 8080;
 
 app.use("/api/products", productsRouter); //rutas del crud productos
 
-app.use("/api/carts", productsRouter); //rutas del crud carts
+app.use("/api/carts", cartsRouter); //rutas del crud carts
 
 initMongoDb(); //función que mantiene la conexión con MongoDb
 app.listen(PORT, ()=> console.log("SERVER UP ON PORT" + PORT)); //levantar el servidor...
