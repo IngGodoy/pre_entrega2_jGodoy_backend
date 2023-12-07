@@ -11,7 +11,7 @@ export default class CartsManager {
 
     async getById(cid){
         try {
-            return await CartModel.findById(cid).populate("products");
+            return await CartModel.findById(cid).populate("products.product");
         } catch (error) {
             console.log(error);
         };
@@ -23,7 +23,7 @@ export default class CartsManager {
 
             return await CartModel.updateOne(
                 { _id: cid },
-                { products: { $pull: { _id: pid } } },
+                { $pull: { products: { product: pid } } },
                 { new: true }
             )
             
@@ -41,17 +41,26 @@ export default class CartsManager {
     };
 
     //actualizar la cantidad de un producto en el cart
-    async updateProductFromCart(cid, pid, updateQuantity) {
+    async updateProdQuantityToCart(cid, pid, updateQuantity) {
         try {
-            return await CartModel.updateOne(
-                { _id: cid, 'products._id': pid },
-                { $set: { 'products.$.quantity': updateQuantity } },
-                { new: true }
-            );
+        
+            const cart = await CartModel.findOne({ _id: cid });
+            const index = cart.products.findIndex(element => element.product == pid);
+            if (index !== -1 && cart) {
+                // Si se encontró el producto, actualizar la cantidad
+                cart.products[index].quantity = updateQuantity;
+                await cart.save(); 
+                return cart;
+            };
+            return false;
+
         } catch (error) {
-            console.log(error);
-        };
-    };
+            console.error(error);
+        }
+    }
+    
+    
+    
 
     //actualizar array de productos del cart
     async updateCart(cid, updateProducts) {
@@ -71,7 +80,7 @@ export default class CartsManager {
             console.log("ir a agregar el producto");
             console.log("cid: " +cid+ "/ pid: " + pid) //borrar
             const cart = await CartModel.findById(cid);
-            cart.products.push(pid);
+            cart.products.push({product:pid});
             cart.save(); // guardar los cambios en mongoDb
             return cart;
         } catch (error) {

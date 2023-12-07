@@ -4,7 +4,7 @@ import {
     getCartById,
     deletProductByIdFromCart,
     create,
-    updateProductFromCart,
+    updateProdQuantityToCart,
     updateCart,
     addProductToCart,
     removeAllProductsFromCart
@@ -22,12 +22,12 @@ router.delete("/:cid/products/:pid", deletProductByIdFromCart);
 
 router.post("/", create);
 
-router.put("/:cid/products/:pid", updateProductFromCart);
+router.put("/:cid/products/:pid", updateProdQuantityToCart);
 
 router.put("/:cid", updateCart);
 
 router.post("/:cid/products/:pid", addProductToCart);
 
-router.delete("/:cid", removeAllProductsFromCart);
+router.delete("/clearCart/:cid", removeAllProductsFromCart);
 
 export default router;

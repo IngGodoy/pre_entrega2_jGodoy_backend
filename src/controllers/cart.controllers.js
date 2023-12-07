@@ -47,11 +47,11 @@ export const create = async (req, res)=>{
     };
 };
 
-export const updateProductFromCart = async (req, res)=>{
+export const updateProdQuantityToCart = async (req, res)=>{
     try {
         const {cid, pid} = req.params;
         const {updateQuantity} = req.body;
-        const cart = await cartsManager.updateProductFromCart(cid, pid, updateQuantity);
+        const cart = await cartsManager.updateProdQuantityToCart(cid, pid, updateQuantity);
         if(!cart) return res.status(400).json({msg: "cart not fount"});
         else return res.status(200).json(cart);
     } catch (error) {
@@ -79,8 +79,8 @@ export const addProductToCart = async (req, res)=>{
         if(!cart){
             return res.status(400).json({msg: "cart not fount"});
         }else{
-            const checkProduct = cart.products.some((product)=>{
-                return product._id == pid
+            const checkProduct = cart.products.some((element)=>{
+                return element.product == pid
             });
             console.log("verificacion de producto", checkProduct) //borrar
             //verificar si el producto ya fue agregado en el cart

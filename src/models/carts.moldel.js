@@ -6,6 +6,7 @@ export const cartsCollection = "carts"; // nombre de la carpeta collection en mo
 const cartSchema = new Schema({
     products: [
         {
+          _id: false,
           product: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "products",
@@ -16,8 +17,4 @@ const cartSchema = new Schema({
       ]
     });
     
-    //cartSchema.pre("find", function () {
-    // this.populate("products");
-    //});
-
 export const CartModel = model(cartsCollection, cartSchema);
