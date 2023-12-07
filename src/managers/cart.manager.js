@@ -65,11 +65,9 @@ export default class CartsManager {
     //actualizar array de productos del cart
     async updateCart(cid, updateProducts) {
         try {
-            return await CartModel.updateOne(
-                { _id: cid },
-                { $set: { 'products': updateProducts } },
-                { new: true }
-            );
+            console.log("ver array:  ", updateProducts) //borrar
+            const cart = await CartModel.findByIdAndUpdate(cid, { products: updateProducts }, { new: true });
+            return cart
         } catch (error) {
             console.log(error);
         };

@@ -61,10 +61,12 @@ export const updateProdQuantityToCart = async (req, res)=>{
 
 export const updateCart = async (req, res)=>{
     try {
-        const {updateProducts} = req.body;
-        const cart = await cartsManager.updateCart(updateProducts);
-        if(!cart) return res.status(400).json({msg: "cart not fount"});
-        else return res.status(200).json(cart);
+        const {products} = req.body;
+        const {cid} = req.params;
+        console.log("req.body",products) //borrar
+        if(!cartsManager.getById(cid)) return res.status(400).json({msg: "cart not fount"});
+        const cart = await cartsManager.updateCart(cid, products);
+        return res.status(200).json(cart);
     } catch (error) {
         console.log(error)
     };
@@ -76,22 +78,20 @@ export const addProductToCart = async (req, res)=>{
         const cart = await cartsManager.getById(cid);
         console.log("ver cart a agregar product: ", cart) //borrar
         //verificar si el cart con _id existe
-        if(!cart){
-            return res.status(400).json({msg: "cart not fount"});
-        }else{
-            const checkProduct = cart.products.some((element)=>{
-                return element.product == pid
-            });
-            console.log("verificacion de producto", checkProduct) //borrar
-            //verificar si el producto ya fue agregado en el cart
-            if(checkProduct) res.status(400).json({msg: "existing product"});
-            else {
-                
-                const updateCart = await cartsManager.addProductToCart(cid, pid); //cart con el nuevo producto
-                console.log("ver cart con product", updateCart) //borrar
-                return res.status(200).json(updateCart);
-            };
-        };  
+        if(!cart) return res.status(400).json({msg: "cart not fount"});
+
+        const checkProduct = cart.products.find((element) => {
+            return element.product._id == pid
+        });
+        console.log("verificacion de producto", checkProduct) //borrar
+
+        //verificar si el producto ya fue agregado en el cart
+        if(checkProduct) return res.status(400).json({msg: "existing product"});
+
+        //agregar producto al cart
+        const updateCart = await cartsManager.addProductToCart(cid, pid);
+        return res.status(200).json(updateCart);
+         
     } catch (error) {
         console.log(error)
     };
